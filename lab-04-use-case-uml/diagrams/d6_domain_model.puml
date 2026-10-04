@@ -1,0 +1,106 @@
+@startuml d6_domain_model
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 14
+skinparam class {
+  BackgroundColor #F5F9FF
+  BorderColor #2F5597
+  ArrowColor #333333
+}
+hide empty methods
+
+
+abstract class StaffMember {
+  staffId
+  name
+  phone
+}
+class RentalClerk
+class BusinessOwner
+
+class Customer {
+  customerId
+  name
+  phone
+}
+
+class Equipment {
+  equipmentId
+  name
+  type
+  dailyRate
+  status : EquipmentStatus
+  isAvailable()
+  setStatus(newStatus)
+}
+
+class Rental {
+  rentalId
+  startDateTime
+  dueDateTime
+  returnDateTime [0..1]
+  agreedCharge
+  returnCondition : Condition [0..1]
+  /balance
+  /isOverdue
+  close(returnDateTime, condition)
+}
+
+class Payment {
+  paymentId
+  amount
+  method : PaymentMethod
+  paymentDateTime
+}
+
+class Receipt {
+  receiptNo
+  issueDateTime
+  remainingBalance
+}
+
+class RentalRequest {
+  requestId
+  requestedStart
+  requestedEnd
+  status : RequestStatus
+}
+
+enum EquipmentStatus {
+  Available
+  Rented
+  UnderMaintenance
+}
+enum Condition {
+  Good
+  NeedsMaintenance
+}
+enum PaymentMethod {
+  Cash
+  CardAtCounter
+  BankTransfer
+}
+enum RequestStatus {
+  Pending
+  Accepted
+  Rejected
+}
+
+StaffMember <|-- RentalClerk
+StaffMember <|-- BusinessOwner
+
+Customer "1" -- "0..*" Rental : rents >
+Rental "0..*" -- "1" Equipment : for >
+StaffMember "1" -- "0..*" Rental : records >
+Rental "1" -- "0..*" Payment : paid by >
+Payment "1" *-- "1" Receipt
+Customer "1" -- "0..*" RentalRequest : submits >
+RentalRequest "0..*" -- "1" Equipment : asks for >
+BusinessOwner "1" -- "0..*" Equipment : changes maintenance status of >
+
+Equipment -[hidden]- EquipmentStatus
+Rental -[hidden]- Condition
+Payment -[hidden]- PaymentMethod
+RentalRequest -[hidden]- RequestStatus
+@enduml

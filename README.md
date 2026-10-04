@@ -17,7 +17,7 @@ An Equipment Rental Management System that helps a rental business track equipme
 - [Lab 1 — Market Study](lab-01-market-study/)
 - [Lab 2 — Persona / User Stories](lab-02-persona-user-stories/)
 - [Lab 3 — Requirements Specification](lab-03-requirement-engineering/)
-- Lab 4 — Use Case (coming, due 7 October 2026)
+- [Lab 4 — Use Case & UML](lab-04-use-case-uml/)
 
 ## Other materials
 - `feasibility-study/` — feasibility study in DOCX and PDF

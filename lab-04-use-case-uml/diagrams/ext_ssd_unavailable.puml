@@ -1,0 +1,25 @@
+@startuml ext_ssd_unavailable
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 14
+hide footbox
+actor "Rental Clerk" as Clerk
+participant ":EquRental System" as Sys
+
+Clerk -> Sys : selectCustomer(customerId)
+Clerk -> Sys : enterEquipment(equipmentId)
+Clerk -> Sys : enterDetails(start, due, agreedCharge)
+Clerk -> Sys : confirmRental()
+Sys -> Sys : validateDetails()
+Sys -> Sys : verifyAvailability(equipmentId)
+Sys --> Clerk : "Equipment not available"\n(status Rented / Under maintenance)
+note over Sys : no rental saved, equipment\nstatus unchanged (ER-04)
+opt clerk chooses another item
+  Clerk -> Sys : searchAvailable(type)
+  Sys --> Clerk : list of Available items (ER-01)
+  Clerk -> Sys : enterEquipment(newEquipmentId)
+  Clerk -> Sys : confirmRental()
+  Sys --> Clerk : rentalId, dueDateTime
+end
+@enduml

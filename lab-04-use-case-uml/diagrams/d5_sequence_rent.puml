@@ -1,0 +1,53 @@
+@startuml d5_sequence_rent
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 14
+skinparam sequence {
+  LifeLineBorderColor #2F5597
+  ParticipantBackgroundColor #F5F9FF
+  ParticipantBorderColor #2F5597
+  ActorBorderColor #333333
+  GroupBorderColor #888888
+}
+hide footbox
+
+actor "Rental Clerk" as Clerk
+boundary "RentalScreen" as UI
+control "RentalController" as Ctrl
+entity ":Customer" as Cust
+entity ":Equipment" as Eq
+entity ":Rental" as Rent
+
+== MSS 1-2: Find and select customer ==
+Clerk -> UI : searchCustomer(nameOrPhone)
+UI -> Ctrl : findCustomer(nameOrPhone)
+Ctrl -> Cust : find(nameOrPhone)
+Cust --> Ctrl : customer details
+Ctrl --> UI : matching customers
+UI --> Clerk : show matching customers
+Clerk -> UI : selectCustomer(customerId)
+
+== MSS 3-5: Enter rental details and confirm ==
+Clerk -> UI : enterEquipment(equipmentId)
+Clerk -> UI : enterDetails(start, due, agreedCharge)
+Clerk -> UI : confirmRental()
+UI -> Ctrl : createRental(customerId, equipmentId,\nstart, due, agreedCharge)
+
+== MSS 6: Validate details (ER-03) ==
+Ctrl -> Ctrl : validateDetails()
+
+== MSS 7: <<include>> UC-4 Verify Equipment Availability (ER-04) ==
+Ctrl -> Eq : isAvailable()
+Eq --> Ctrl : true
+
+== MSS 8: Create rental and mark equipment Rented (ER-05) ==
+Ctrl -> Rent ** : <<create>> Rental(customer, equipment,\nstart, due, agreedCharge)
+Rent --> Ctrl : rentalId
+Ctrl -> Eq : setStatus(Rented)
+note right of Ctrl : saved together as one\noperation (ER-05)
+
+== MSS 9: Show result ==
+Ctrl --> UI : rentalId, dueDateTime
+UI --> Clerk : show rental ID and due date
+@enduml

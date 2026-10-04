@@ -1,0 +1,58 @@
+@startuml d3_usecase
+left to right direction
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontSize 15
+skinparam ranksep 30
+skinparam nodesep 12
+skinparam padding 2
+skinparam defaultFontName DejaVu Sans
+skinparam usecase {
+  BackgroundColor #F5F9FF
+  BorderColor #2F5597
+}
+skinparam rectangle {
+  BorderColor #2F5597
+  FontStyle bold
+}
+skinparam actorBorderColor #333333
+
+actor "Rental Clerk" as Clerk
+actor "Business Owner" as Owner
+actor "Customer" as Cust
+
+rectangle "Equipment Rental Management System (EquRental)" {
+  usecase "UC-1 Rent Equipment" as UC1
+  usecase "UC-2 Return Equipment" as UC2
+  usecase "UC-3 Search Available\nEquipment" as UC3
+  usecase "UC-4 Verify Equipment\nAvailability" as UC4
+  usecase "UC-5 Record Payment" as UC5
+  usecase "UC-6 Manage Customer\nRecords" as UC6
+  usecase "UC-7 Manage Equipment\nRecords" as UC7
+  usecase "UC-8 View Overdue\nRentals" as UC8
+  usecase "UC-9 Update Maintenance\nStatus" as UC9
+  usecase "UC-10 Browse Equipment\nCatalog" as UC10
+  usecase "UC-11 Submit Rental\nRequest" as UC11
+  usecase "UC-12 View Business\nReports" as UC12
+}
+
+Clerk <|-- Owner
+
+Clerk -- UC3
+Clerk -- UC6
+Clerk -- UC1
+Clerk -- UC2
+Clerk -- UC7
+Clerk -- UC8
+Owner -- UC9
+Owner -- UC12
+
+UC1 ..> UC4 : <<include>>
+UC1 <.. UC5 : <<extend>>\n[customer pays\nat pickup]
+UC2 <.. UC5 : <<extend>>\n[balance\noutstanding]
+UC12 -[hidden]- UC11
+UC6 -[hidden]- UC10
+UC11 .[norank].> UC4 : <<include>>
+UC11 -- Cust
+UC10 -- Cust
+@enduml
