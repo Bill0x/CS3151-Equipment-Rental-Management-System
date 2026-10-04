@@ -1,0 +1,59 @@
+@startuml d4_activity_return
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 14
+skinparam activity {
+  BackgroundColor #F5F9FF
+  BorderColor #2F5597
+  DiamondBackgroundColor #FFF8E1
+  DiamondBorderColor #B07B00
+}
+
+|Rental Clerk|
+start
+:Look up active rental\nby rental ID or\nequipment ID;
+|System|
+if (Active rental\nfound?) then (yes)
+  :Display rental details\n(customer, equipment,\ndue date, balance);
+  if (Due date/time\npassed?) then (yes)
+    :Flag rental as\noverdue (days late);
+  else (no)
+  endif
+else (no)
+  :Show "No active\nrental found";
+  stop
+endif
+|Rental Clerk|
+repeat
+  fork
+    :Enter actual\nreturn date/time;
+  fork again
+    :Inspect equipment,\nrecord condition;
+  end fork
+  :Confirm return;
+  |System|
+  :Validate return
+  data (ER-06);
+backward:Show error,\nhighlight fields;
+repeat while (Data valid?) is (no) not (yes)
+fork
+  :Close rental\n(save return time\nand condition);
+fork again
+  if (Condition?) then (Good)
+    :Set status =\nAvailable;
+  else (Needs\nmaintenance)
+    :Set status =\nUnder\nmaintenance;
+  endif
+end fork
+:Save both changes as
+one operation (ER-07);
+if (Outstanding\nbalance > 0?) then (yes)
+  |Rental Clerk|
+  :<<extend>>\nUC-5 Record Payment\n(receipt printed);
+else (no)
+endif
+|System|
+:Display return\nconfirmation, equipment\nstatus and balance;
+stop
+@enduml

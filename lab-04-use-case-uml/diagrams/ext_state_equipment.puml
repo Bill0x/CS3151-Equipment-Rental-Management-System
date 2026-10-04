@@ -1,0 +1,19 @@
+@startuml ext_state_equipment
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 14
+skinparam state {
+  BackgroundColor #F5F9FF
+  BorderColor #2F5597
+}
+[*] --> Available : addEquipment [initial = Available]\n(UC-7, ER-10)
+[*] --> UnderMaintenance : addEquipment\n[initial = Under maintenance]
+Available --> Rented : rentalConfirmed\n(UC-1, ER-05)
+Rented --> Available : returned [condition = Good]\n(UC-2, ER-07)
+Rented --> UnderMaintenance : returned\n[condition = Needs maintenance]\n(UC-2, ER-07)
+Available --> UnderMaintenance : markUnderMaintenance\n(UC-9, ER-12)
+UnderMaintenance --> Available : maintenanceComplete\n(UC-9, ER-13)
+Rented : overdue when due date passes (derived, ER-08)
+Rented : manual status change rejected (ER-14)
+@enduml
