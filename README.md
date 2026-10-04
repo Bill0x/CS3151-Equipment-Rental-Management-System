@@ -13,12 +13,13 @@ An Equipment Rental Management System that helps a rental business track equipme
 - Update Equipment Status
 - Process Payments
 
-## Repository contents
-- `lab-01-market-study/` — Lab 1 placeholder and known market-study context
-- `lab-03-requirement-engineering/` — completed Lab 3 document
+## Labs
+- [Lab 1 — Market Study](lab-01-market-study/)
+- [Lab 2 — Persona / User Stories](lab-02-persona-user-stories/)
+- [Lab 3 — Requirements Specification](lab-03-requirement-engineering/)
+- Lab 4 — Use Case (coming, due 7 October 2026)
+
+## Other materials
 - `feasibility-study/` — feasibility study in DOCX and PDF
 - `requirements/` — non-functional requirements
 - `business-model-canvas/` — business model canvas
-
-## Note
-This repository contains every CS3151 Equipment Rental project file that was accessible for export at the time it was assembled. Some earlier original attachments were referenced in previous chats but were not available as raw files, so they are noted rather than recreated as if they were originals.
